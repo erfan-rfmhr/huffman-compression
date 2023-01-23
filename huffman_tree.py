@@ -52,3 +52,22 @@ class Huffman:
             node = Node(char, frequency)
             # Push the node into the priority queue
             heapq.heappush(self.__priority_queue, node)
+            
+    def make_tree(self) -> None:
+        # Initialize the node variables
+        node1: Node
+        node2: Node
+        # While the priority queue is not empty
+        while len(self.__priority_queue) > 1:
+            # Pop the two minimum values from the queue
+            node1 = heapq.heappop(self.__priority_queue)
+            node2 = heapq.heappop(self.__priority_queue)
+            # Re-create the nodes' attributes to form the parent node
+            parent_char = node1.char + node2.char
+            parent_freq = node1.frequency + node2.frequency
+            parent = Node(parent_char, parent_freq)
+            # Push the parent node back to the priority queue
+            heapq.heappush(self.__priority_queue, parent)
+
+        # Set the root as the only item left in the list
+        self.__root = heapq.heappop(self.__priority_queue)
