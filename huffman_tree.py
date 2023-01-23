@@ -71,3 +71,16 @@ class Huffman:
 
         # Set the root as the only item left in the list
         self.__root = heapq.heappop(self.__priority_queue)
+
+    def find_codes(self, root: Node, code: str) -> None:
+        # Stop the recursion when the given node is None
+        if root is None:
+            return
+        # When the node's character is of length 1, assign that code to the dictionary
+        if len(root.char) == 1:
+            self.codes[root.char] = code
+            return
+        # Recursively call the method for the left subtree
+        self.find_codes(root.left, code + "0")
+        # Recursively call the method for the right subtree
+        self.find_codes(root.right, code + "1")
