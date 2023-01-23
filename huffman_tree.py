@@ -51,7 +51,7 @@ class Huffman:
         # Returns the frequencies
         return frequencies
     
-    def build_priority_queue(self, frequencies: Counter) -> None:
+    def __build_priority_queue(self, frequencies: Counter) -> None:
         # Iterate over the frequencies
         for char, frequency in frequencies.items():
             # Create a node
@@ -59,7 +59,7 @@ class Huffman:
             # Push the node into the priority queue
             heapq.heappush(self.__priority_queue, node)
             
-    def make_tree(self) -> None:
+    def __make_tree(self) -> None:
         # Initialize the node variables
         node1: Node
         node2: Node
@@ -88,23 +88,50 @@ class Huffman:
         # Set the root as the only item left in the list
         self.__root = heapq.heappop(self.__priority_queue)
 
-    def find_codes(self, root: Node, code: str) -> None:
+    def __find_codes(self, root: Node, current_code: str = '') -> None:
         # Stop the recursion when the given node is None
         if root is None:
             return
         # When the node's character is of length 1, assign that code to the dictionary
         if len(root.char) == 1:
-            self.codes[root.char] = code
+            self.codes[root.char] = current_code
             return
         # Recursively call the method for the left subtree
-        self.find_codes(root.left, code + "0")
+        self.__find_codes(root.left, current_code + '0')
         # Recursively call the method for the right subtree
-        self.find_codes(root.right, code + "1")
+        self.__find_codes(root.right, current_code + '1')
         
-    def encode_text(self, text: str) -> str:
-        # Save encoded text
-        encoded_text = ""
+    # Encoding text into bytes
+    def encode_text(self, text: str) -> bytes:
+        """This function encodes the given text into bytes using a given code. 
+        
+        This function first finds the frequency of each character in the given string, 
+        builds a priority queue from the given frequencies and creates a tree from 
+        that queue. After the tree is created, it finds the codes for each character
+        and encodes the given text with the found codes.
+        
+        Params:
+            text (str): The text to be encoded
+        
+        Returns:
+            bytes: The encoded version of the given text
+        """
+        frequencies = self.find_frequencies(text)
+        self.__build_priority_queue(frequencies)
+        self.__make_tree()
+        self.__find_codes(self.root)
+        array = bytearray()
+        num_of_codes = len(self.codes)
+        array.append(num_of_codes)
+        # Append the ordinal of each character
+        for char, code in self.codes.items():
+            array.append(ord(char))
+            # Encode each character with a padding of 1
+            code = '1' + code
+            decimal_code = int(code, 2)
+            array.append(decimal_code)
+        # Append the encoded version of each character in the text    
         for char in text:
-            # Replace characters with corresponding code
-            encoded_text += self.codes[char]
-        return encoded_text
+            padded_encoded_char = '1' + self.codes[char]
+            array.append(int(padded_encoded_char, 2))
+        return bytes(array)
