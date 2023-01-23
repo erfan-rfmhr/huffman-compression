@@ -50,3 +50,11 @@ class Huffman:
         frequencies.update(text)
         # Returns the frequencies
         return frequencies
+    
+    def build_priority_queue(self, frequencies: Counter) -> None:
+        # Iterate over the frequencies
+        for char, frequency in frequencies.items():
+            # Create a node
+            node = Node(char, frequency)
+            # Push the node into the priority queue
+            heapq.heappush(self.__priority_queue, node)
