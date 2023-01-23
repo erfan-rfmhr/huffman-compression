@@ -84,3 +84,11 @@ class Huffman:
         self.find_codes(root.left, code + "0")
         # Recursively call the method for the right subtree
         self.find_codes(root.right, code + "1")
+        
+    def encode_text(self, text: str) -> str:
+        # Save encoded text
+        encoded_text = ""
+        for char in text:
+            # Replace characters with corresponding code
+            encoded_text += self.codes[char]
+        return encoded_text
