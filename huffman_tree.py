@@ -1,5 +1,6 @@
 import heapq
 import os
+from collections import Counter
 
 
 class Node:
@@ -41,3 +42,11 @@ class Huffman:
         return self.__root
     
     
+    @staticmethod
+    def find_frequencies(text: str) -> Counter:
+        # Initialize a Counter
+        frequencies = Counter()
+        # Update the frequencies with the given text
+        frequencies.update(text)
+        # Returns the frequencies
+        return frequencies
