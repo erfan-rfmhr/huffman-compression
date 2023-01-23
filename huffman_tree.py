@@ -14,6 +14,12 @@ class Node:
         # Initializes the pointer to the left subtree
         self.left = None
         
+    def __lt__(self, __o: object) -> bool:
+        return self.frequency < __o.frequency
+    
+    def __eq__(self, __o: object) -> bool:
+        return self.frequency == __o.frequency
+        
 class Huffman:
     def __init__(self) -> None:
         # Initialize the dictionary of codes
@@ -66,6 +72,16 @@ class Huffman:
             parent_char = node1.char + node2.char
             parent_freq = node1.frequency + node2.frequency
             parent = Node(parent_char, parent_freq)
+            # Check if node1 is less than node2 
+            if node1 < node2:
+                # Set the parent's left child to node1 and right child to node2
+                parent.left = node1
+                parent.right = node2
+            # Otherwise 
+            else: 
+                # Set the parent's left child to node2 and right child to node1
+                parent.left = node2
+                parent.right = node1
             # Push the parent node back to the priority queue
             heapq.heappush(self.__priority_queue, parent)
 
