@@ -28,13 +28,7 @@ class Huffman:
         # Returns the dictionary of codes
         # It does'nt have setter
         return self.__codes
-    
-    @property
-    def priority_queue(self):
-        # Returns the priority queue
-        # It does'nt have setter
-        return self.__priority_queue
-    
+        
     @property
     def root(self):
         # Returns the root node
