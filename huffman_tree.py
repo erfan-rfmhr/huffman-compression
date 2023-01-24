@@ -1,5 +1,4 @@
 import heapq
-import os
 from collections import Counter
 
 
@@ -59,7 +58,7 @@ class Huffman:
             # Push the node into the priority queue
             heapq.heappush(self.__priority_queue, node)
             
-    def __make_tree(self) -> None:
+    def __build_tree(self) -> None:
         # Initialize the node variables
         node1: Node
         node2: Node
@@ -118,7 +117,7 @@ class Huffman:
         """
         frequencies = self.find_frequencies(text)
         self.__build_priority_queue(frequencies)
-        self.__make_tree()
+        self.__build_tree()
         self.__find_codes(self.root)
         array = bytearray()
         num_of_codes = len(self.codes)
