@@ -1,5 +1,5 @@
 import os
-from tkinter import Button, Entry, Frame, Label, Tk, filedialog, messagebox
+from tkinter import Button, Entry, Frame, Label, Tk, filedialog, messagebox, END
 
 from utils import compress, decompress
 
