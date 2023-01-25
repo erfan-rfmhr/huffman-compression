@@ -196,9 +196,9 @@ class Huffman:
             # Append each bit to the bit string
             bit_string += bit
             # If the current bit string matches a character in the reverse mapping
-            if bit_string in self.reverse_mapping:
+            if bit_string in self.__reverse_mapping:
                 # Add the character it matches to the decoded text
-                decoded_text += self.reverse_mapping[bit_string]
+                decoded_text += self.__reverse_mapping[bit_string]
                 # Reset the bit string
                 bit_string = ""
 
