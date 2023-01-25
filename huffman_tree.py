@@ -19,44 +19,34 @@ class Node:
     def __eq__(self, __o: object) -> bool:
         return self.frequency == __o.frequency
         
+        
 class Huffman:
     def __init__(self) -> None:
-        # Initialize the dictionary of codes
+        # Initialize the dictionary of codes for encoding
         self.__codes = {}
+        # Initialize the dictionary of reverse mapping for decoding
+        self.__reverse_mapping = {}
         # Initialize the priority queue
         self.__priority_queue = []
+        # Initialize the counter of frequencies
+        self.__frequencies = Counter()
         # Initialize the root node
         self.__root = None
-        
-    @property
-    def codes(self):
-        # Returns the dictionary of codes
-        # It does'nt have setter
-        return self.__codes
-        
-    @property
-    def root(self):
-        # Returns the root node
-        # It does'nt have setter
-        return self.__root
+            
     
-    
-    @staticmethod
-    def find_frequencies(text: str) -> Counter:
-        # Initialize a Counter
-        frequencies = Counter()
+    def __find_frequencies(self, text: str) -> None:
         # Update the frequencies with the given text
-        frequencies.update(text)
-        # Returns the frequencies
-        return frequencies
+        self.__frequencies.update(text)
     
-    def __build_priority_queue(self, frequencies: Counter) -> None:
+    
+    def __build_priority_queue(self) -> None:
         # Iterate over the frequencies
-        for char, frequency in frequencies.items():
+        for char, frequency in self.__frequencies.items():
             # Create a node
             node = Node(char, frequency)
             # Push the node into the priority queue
             heapq.heappush(self.__priority_queue, node)
+            
             
     def __build_tree(self) -> None:
         # Initialize the node variables
@@ -86,6 +76,7 @@ class Huffman:
 
         # Set the root as the only item left in the list
         self.__root = heapq.heappop(self.__priority_queue)
+        
 
     def __find_codes(self, root: Node, current_code: str = '') -> None:
         # Stop the recursion when the given node is None
@@ -93,12 +84,27 @@ class Huffman:
             return
         # When the node's character is of length 1, assign that code to the dictionary
         if len(root.char) == 1:
-            self.codes[root.char] = current_code
+            self.__codes[root.char] = current_code
             return
         # Recursively call the method for the left subtree
         self.__find_codes(root.left, current_code + '0')
         # Recursively call the method for the right subtree
         self.__find_codes(root.right, current_code + '1')
+        
+        
+    def __build_reverse_mapping(self, root: Node, current_code: str = '') -> None:
+        # Stop the recursion when the given node is None
+        if root is None:
+            return
+        # When the node's character is of length 1, assign that code to the dictionary
+        if len(root.char) == 1:
+            self.__reverse_mapping[current_code] = root.char
+            return
+        # Recursively call the method for the left subtree
+        self.__build_reverse_mapping(root.left, current_code + '0')
+        # Recursively call the method for the right subtree
+        self.__build_reverse_mapping(root.right, current_code + '1')
+        
         
     def encode_text(self, text) -> bytes:
         """Encodes the given text using Huffman encoding.
@@ -113,35 +119,36 @@ class Huffman:
         encoded_text = ''
 
         # Count the frequencies of characters in the text
-        frequencies = self.find_frequencies(text)
+        self.__find_frequencies(text)
 
         # Create a priority queue of tuples representing
         # the characters and their frequencies
-        self.__build_priority_queue(frequencies)
+        self.__build_priority_queue()
 
         # Build the Huffman tree using the priority queue
         self.__build_tree()
 
         # Calculate the Huffman codes
-        self.__find_codes(self.root)
-        print(self.codes)
+        self.__find_codes(self.__root)
 
         # Create a bytearray object to store the encoded output
         array = bytearray()
 
         # Calculate the number of characters (codes)
-        num_of_chars = len(frequencies)
+        num_of_chars = len(self.__frequencies)
 
         # Encode the number of codes
-        encoded_text += bin(num_of_chars)[2:]
+        encoded_text += f"{num_of_chars:08b}"
 
         # Encode the character codes and their respective frequencies
-        for char, freq in frequencies.items():
-            encoded_text += bin(ord(char))[2:] + bin(freq)[2:]
+        for char, freq in self.__frequencies.items():
+            bin_char = bin(ord(char))[2:]
+            bin_freq = bin(freq)[2:]
+            encoded_text += f"{len(bin_char):08b}" + bin_char + f"{len(bin_freq):08b}" + bin_freq 
 
         # Encode the characters in the original text
         for char in text:
-            encoded_text += self.codes[char]
+            encoded_text += self.__codes[char]
 
         # Pad out the encoded text to a multiple of 8 bits
         extra_padding = 8 - len(encoded_text) % 8
@@ -158,3 +165,42 @@ class Huffman:
 
         # Return the bytes object
         return bytes(array)
+
+
+    def decode_text(self, encoded_text: str, frequencies: dict) -> str:
+        """Decodes the given text using Huffman encoding.
+        
+        Params:
+            encoded_text (str): The encoded text to decode.
+            frequencies (dict): The frequencies of characters in the original text.
+        
+        Returns:
+            str: The decoded text.
+        """
+        # Set the frequencies attribute using the provided dictionary
+        self.__frequencies = frequencies
+
+        # Create the priority queue and Huffman tree    
+        self.__build_priority_queue()
+        self.__build_tree()
+
+        # Create a reverse mapping of characters and bit strings
+        self.__build_reverse_mapping(self.__root)
+        # Initialise a string to store the current bit string
+        bit_string = ""
+        # Initialise a string to store the decoded text
+        decoded_text = ""
+
+        # Iterate through the encoded text
+        for bit in encoded_text:
+            # Append each bit to the bit string
+            bit_string += bit
+            # If the current bit string matches a character in the reverse mapping
+            if bit_string in self.reverse_mapping:
+                # Add the character it matches to the decoded text
+                decoded_text += self.reverse_mapping[bit_string]
+                # Reset the bit string
+                bit_string = ""
+
+        # Return the decoded text
+        return decoded_text
