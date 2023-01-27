@@ -61,7 +61,7 @@ class App(Frame):
     # Ask user to pick a file
     def __browse(self):
         # Ask open file dialog 
-        file_dir = filedialog.askopenfilename(initialdir="/home/erfan/Desktop", title="Select file", filetypes=(("all files", "*.*"), ("text files", "*.txt"), ("cmp files", "*.cmp")))
+        file_dir = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select file", filetypes=(("all files", "*.*"), ("text files", "*.txt"), ("cmp files", "*.cmp")))
         # Delete existing input in input entry
         self.input_entry.delete(0, END)
         # Insert selected path in input entry
