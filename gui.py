@@ -1,6 +1,7 @@
 import os
-from tkinter import (END, Button, Entry, Frame, Label, Tk, filedialog,
+from tkinter import (END, Tk, filedialog,
                      messagebox)
+from tkinter.ttk import Button, Entry, Frame, Label, Style
 
 from utils import compress, decompress
 
@@ -13,7 +14,7 @@ class App(Frame):
         # Set title
         master.title("Huffman")
         # Set window size
-        master.geometry("700x470")
+        master.geometry("600x500")
         # Disallow resizing
         master.resizable(False, False)
         # Inherit Frame to create gui
@@ -25,36 +26,46 @@ class App(Frame):
     
     # Create all the widgets
     def __create_widgets(self):
+        # Configure styles
+        style = Style()
+        # Buttons style
+        style.configure("TButton", padding=6, relief="flat", background="#FAD6A5", font=('Helvetica', 22))
+		# Frame style
+        style.configure("TFrame", background="#567189")
+        # Labels style
+        style.configure("TLabel", background="#567189", foreground="black", font=('Helvetica', 22))
+        # Entries style
+        style.configure("TEntry", background="#FAD6A5", foreground="black")
         # Create quit button
-        self.quit_button = Button(self, text="Quit", command=self.quit, width=10, font=("Arial", 20))
+        self.quit_button = Button(self, text="Quit", command=self.quit, width=10)
         # Pack the quit button
         self.quit_button.pack(padx=10, pady=10)
         # Create browse button
-        self.browse_button = Button(self, text="Browse", command=self.__browse, width=10, font=("Arial", 30))
+        self.browse_button = Button(self, text="Browse", command=self.__browse, width=10)
         # Pack browse button
         self.browse_button.pack(pady=10)
         # Create input label
-        self.input_label = Label(self, text="Input file", font=("Arial", 15))
+        self.input_label = Label(self, text="Input file")
         # Pack input label
         self.input_label.pack(padx=10, pady=10)
         # Create input entry
-        self.input_entry = Entry(self, width=70, font=("Arial", 15), justify="center")
+        self.input_entry = Entry(self, width=70, justify="center", font=('Helvetica', 18))
         # Pack input entry
-        self.input_entry.pack(padx=10, pady=10)
+        self.input_entry.pack(padx=10, pady=10, ipady=7)
         # Create output label
-        self.output_label = Label(self, text="Output file", font=("Arial", 15))
+        self.output_label = Label(self, text="Output file")
         # Pack output label
         self.output_label.pack(padx=10, pady=10)
         # Create output entry
-        self.output_entry = Entry(self, width=70, font=("Arial", 15), justify="center")
+        self.output_entry = Entry(self, width=70, justify="center", font=('Helvetica', 18))
         # Pack output entry
-        self.output_entry.pack(padx=10, pady=10)
+        self.output_entry.pack(padx=10, pady=10, ipady=7)
         # Create compress button
-        self.cmp_button = Button(self, text="Compress", command=self.__cmp, width=10, font=("Arial", 20))
+        self.cmp_button = Button(self, text="Compress", command=self.__cmp, width=10)
         # Pack compress button
         self.cmp_button.pack(padx=10, pady=10)
         # Create decompress button
-        self.dcmp_button = Button(self, text="Decompress", command=self.__dcmp, width=10, font=("Arial", 20))
+        self.dcmp_button = Button(self, text="Decompress", command=self.__dcmp, width=13)
         # Pack decompress button
         self.dcmp_button.pack(padx=10, pady=10)
     
