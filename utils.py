@@ -27,8 +27,7 @@ def write_cmp_file(path: str, data: bytes) -> None:
 
 
 # Compress a file using Huffman encoding
-def compress(origin_path: str = "/home/erfan/Desktop/huffman-compression/sample.txt",
-             cmp_path: str = "/home/erfan/Desktop/huffman-compression/sample.cmp") -> None:
+def compress(origin_path: str, cmp_path: str) -> None:
     # Read file content as string
     file_text = read_original_file(origin_path)
     # Construct Huffman tree
@@ -78,8 +77,7 @@ def read_cmp_file(path: str) -> str:
 
  
 # Decompress a file using Huffman encoding
-def decompress(cmp_path: str = "/home/erfan/Desktop/huffman-compression/sample.cmp",
-               decmp_path: str = "/home/erfan/Desktop/huffman-compression/dcmp_sample.txt") -> None:
+def decompress(cmp_path: str, decmp_path: str) -> None:
     # Read file content as bit string
     bit_string = read_cmp_file(cmp_path)
     # Remove padding from encoded text
