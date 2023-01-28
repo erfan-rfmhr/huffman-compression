@@ -1,9 +1,6 @@
 # Huffman compression project
 ---
 
-Documentation for Compressing and Decompressing Text Files with Huffman Tree
-============================================================================
-
 This project allows users to compress and decompress text files with the Huffman Tree algorithm. It also has a graphical user interface for getting easier access to text files and compression/decompression operations.
 
 Main Features
