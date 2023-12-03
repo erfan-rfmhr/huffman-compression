@@ -13,7 +13,7 @@ class App(Frame):
         # Set title
         master.title("Huffman")
         # Set window size
-        master.geometry("600x500")
+        master.geometry("600x540")
         # Disallow resizing
         master.resizable(False, False)
         # Inherit Frame to create gui
