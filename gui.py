@@ -113,8 +113,9 @@ class App(Frame):
             return
         # If output is empty
         if not output_path:
+            current_dir = os.getcwd()
             # Assign compressed path  output based on input name
-            output_path = f"/home/erfan/Desktop/{input_path_name}.cmp"
+            output_path = os.path.join(current_dir, f"{input_path_name}.cmp")
         # If input file is not a text file
         if input_path_ext != ".txt":
             # Show error message
@@ -151,8 +152,9 @@ class App(Frame):
             return
         # If output is empty
         if not output_path:
+            current_dir = os.getcwd()
             # Assign decompressed path  output based on input name
-            output_path = f"/home/erfan/Desktop/dcmp_{input_path_name}.txt"
+            output_path = os.path.join(current_dir, f"dcmp_{input_path_name}.txt")
         # If input file is not a cmp file
         if input_path_ext != ".cmp":
             # Show error message
